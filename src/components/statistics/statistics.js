@@ -1,37 +1,15 @@
 import PropTypes from 'prop-types';
-import { StatSection, Title, StatList, StatListItem, StatListContent } from './statistics.styled';
-
-
-const Statistiks = ({ title, stats }) => {
-    return (
-        <StatSection>
-        {title && <Title>{title}</Title>}    
-        {stats && <StatList>
-            {stats.map(({ id, label, percentage }) => {
-                const colorItem = {
-                    backgroundColor: `#${Math.floor(Math.random() * 16777215).toString(16).padStart(6, 0)}`,
-                };
-                return (
-                    <StatListItem style={colorItem} key={id}>
-                    <span>{label} </span>
-                    <StatListContent>{percentage}%</StatListContent>
-                    </StatListItem>
-                )
-            }
-            )} 
-        </StatList>}
-        </StatSection>
-    )
+import { Wrapper, Text, SelectedText } from './statistics.styled';
+const Statistics = ({ good, neutral, bad, total, positiveFeedback }) => (
+  <Wrapper>
+    <Text>Good: {good}</Text>
+    <Text>Neturel: {neutral}</Text>
+    <Text>Bad: {bad}</Text>
+    <SelectedText>Total: {total}</SelectedText>
+    <SelectedText>Positive feedback: {positiveFeedback}%</SelectedText>
+  </Wrapper>
+);
+Statistics.protoTypes = {
+  message: PropTypes.string.isRequired,
 };
-
-Statistiks.propTypes = {
-    stats: PropTypes.arrayOf(
-    PropTypes.exact({
-    id: PropTypes.string.isRequired,
-    label: PropTypes.string.isRequired,
-    percentage: PropTypes.number.isRequired,
-    })
-    ),
-};
-
-export default Statistiks;
+export default Statistics;
