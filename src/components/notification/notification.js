@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { Wrapper, Text } from './notification.styled';
-const Notification = ({ message }) => (
+export const Notification = ({ message }) => (
   <Wrapper>
     <Text>{message}</Text>
   </Wrapper>
@@ -8,4 +8,3 @@ const Notification = ({ message }) => (
 Notification.protoTypes = {
   message: PropTypes.string.isRequired,
 };
-export default Notification;

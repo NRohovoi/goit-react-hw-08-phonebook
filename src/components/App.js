@@ -1,57 +1,69 @@
-import { Box } from './box.styled';
 import { Component } from 'react';
-import Section from './section/section';
-import ControlBox from './controlbox/controlbox';
-import Notification from './notification/notification';
-import Statistics from './statistics/statistics';
+
+import { nanoid } from 'nanoid';
+import { Report } from 'notiflix/build/notiflix-report-aio';
+
+import { AddContactForm } from './addcontactform/addcontactform';
+import { ContactFilters } from './contactfilters/contactfilters';
+import { ContactList } from './contactlist/contactlist';
+import { Notification } from './notification/notification';
+
+import { Box, Title, PhonebookIcon } from './box.styled';
 
 export class App extends Component {
   state = {
-    good: 0,
-    neutral: 0,
-    bad: 0,
+    contacts: [],
+    filter: '',
   };
-  handleClickButton = e => {
-    const option = e.target.name;
 
-    if (option) {
-      this.setState(prevState => ({ [option]: prevState[option] + 1 }));
-    }
+  addContact = ({ name, number }) => {
+    const { contacts } = this.state;
+    const newContact = { id: nanoid(), name, number };
+
+    contacts.some(contact => contact.name === name)
+      ? Report.warning(
+          `${name}`,
+          'This user is already in the your contact list.',
+          'OK'
+        )
+      : this.setState(({ contacts }) => ({
+          contacts: [newContact, ...contacts],
+        }));
   };
-  countTotalFeedback = () => {
-    const { good, neutral, bad } = this.state;
-    return good + neutral + bad;
-  };
-  countPositiveFeedback = () => {
-    return Math.floor((this.state.good / this.countTotalFeedback()) * 100);
+
+  onFilterChange = e => this.setState({ filter: e.currentTarget.value });
+
+  filtredContactList = () =>
+    this.state.contacts.filter(({ name }) =>
+      name.toLowerCase().includes(this.state.filter)
+    );
+
+  onDeleteContact = contactId => {
+    this.setState(prevState => ({
+      contacts: prevState.contacts.filter(contact => contact.id !== contactId),
+    }));
   };
 
   render() {
-    const { good, neutral, bad } = this.state;
-    const options = Object.keys(this.state);
-    const total = this.countTotalFeedback();
-    const positiveFeedback = this.countPositiveFeedback();
+    const { filter } = this.state;
     return (
       <Box>
-        <Section title="Please live feedback">
-          <ControlBox
-            options={options}
-            onLeaveFeedback={this.handleClickButton}
+        <PhonebookIcon />
+        <Title>phonebook</Title>
+        <AddContactForm onSubmit={this.addContact} />
+        <Title>contacts</Title>
+        <ContactFilters
+          contactList={filter}
+          onFilterChange={this.onFilterChange}
+        />
+        {this.state.contacts.length > 0 ? (
+          <ContactList
+            filtredContactList={this.filtredContactList()}
+            onDeleteContact={this.onDeleteContact}
           />
-        </Section>
-        <Section title="Statistics">
-          {total === 0 ? (
-            <Notification message="There is no feedback"></Notification>
-          ) : (
-            <Statistics
-              good={good}
-              neutral={neutral}
-              bad={bad}
-              total={total}
-              positiveFeedback={positiveFeedback}
-            />
-          )}
-        </Section>
+        ) : (
+          <Notification message="Contact list is empty." />
+        )}
       </Box>
     );
   }
