@@ -5,7 +5,7 @@ import {
   ContactData,
   Buttom,
   ButtonIcon,
-} from './contactlist.styled';
+} from './ContactList.styled';
 export const ContactList = ({ filtredContactList, onDeleteContact }) => {
   return (
     <ul>

@@ -11,7 +11,7 @@ import {
   Forms,
   Input,
   Message,
-} from './addcontactform.styled';
+} from './AddContactForm.styled';
 
 const schema = yup.object().shape({
   name: yup.string().required(),

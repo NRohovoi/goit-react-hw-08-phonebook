@@ -3,12 +3,12 @@ import { Component } from 'react';
 import { nanoid } from 'nanoid';
 import { Report } from 'notiflix/build/notiflix-report-aio';
 
-import { AddContactForm } from './addcontactform/addcontactform';
-import { ContactFilters } from './contactfilters/contactfilters';
-import { ContactList } from './contactlist/contactlist';
-import { Notification } from './notification/notification';
+import { AddContactForm } from './AddContactForm/AddContactForm';
+import { ContactFilters } from './ContactFilters/ContactFilters';
+import { ContactList } from './ContactList/ContactList';
+import { Notification } from './Notification/Notification';
 
-import { Box, Title, PhonebookIcon } from './box.styled';
+import { Box, Title, PhonebookIcon } from './Box.styled';
 
 export class App extends Component {
   state = {
@@ -19,16 +19,18 @@ export class App extends Component {
   addContact = ({ name, number }) => {
     const { contacts } = this.state;
     const newContact = { id: nanoid(), name, number };
-
-    contacts.some(contact => contact.name === name)
-      ? Report.warning(
-          `${name}`,
-          'This user is already in the your contact list.',
-          'OK'
-        )
-      : this.setState(({ contacts }) => ({
-          contacts: [newContact, ...contacts],
-        }));
+    const inContact = contacts.some(contact => contact.name === name);
+    if (inContact) {
+      return Report.warning(
+        `${name}`,
+        'This user is already in the your contact list.',
+        'OK'
+      );
+    } else {
+      return this.setState(({ contacts }) => ({
+        contacts: [newContact, ...contacts],
+      }));
+    }
   };
 
   onFilterChange = e => this.setState({ filter: e.currentTarget.value });
