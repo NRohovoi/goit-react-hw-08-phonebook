@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-// import { AiOutlineUserAdd } from 'react-icons/ai';
 import { Formik, ErrorMessage } from 'formik';
 import * as yup from 'yup';
 
