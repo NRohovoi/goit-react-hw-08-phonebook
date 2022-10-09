@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { Label, Input, SearchIcon } from './ContactFilters.styled';
+
 export const ContactFilters = ({ contactList, onFilterChange }) => {
   return (
     <Label>

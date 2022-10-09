@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+
 import { AiFillContacts } from 'react-icons/ai';
 
 export const Box = styled.div`

@@ -8,7 +8,7 @@ import { ContactFilters } from './ContactFilters/ContactFilters';
 import { ContactList } from './ContactList/ContactList';
 import { Notification } from './Notification/Notification';
 
-import { Box, Title, PhonebookIcon } from './box.styled';
+import { Box, Title, PhonebookIcon } from './Box.styled';
 
 export class App extends Component {
   state = {
