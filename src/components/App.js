@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-
 import { nanoid } from 'nanoid';
 import { Report } from 'notiflix/build/notiflix-report-aio';
 
@@ -34,18 +33,18 @@ export const App = () => {
       : setContacts(prevContacts => [newContact, ...prevContacts]);
   };
 
-  const deleteContact = contactId => {
-    setContacts(contacts =>
-      contacts.filter(contact => contact.id !== contactId)
-    );
-  };
-
   const onFilterChange = e => setFilter(e.currentTarget.value);
 
   const filtredContactList = () => {
     const normalizedFilter = filter.toLowerCase();
     return contacts.filter(contact =>
       contact.name.toLowerCase().includes(normalizedFilter)
+    );
+  };
+
+  const onDeleteContact = contactId => {
+    setContacts(contacts =>
+      contacts.filter(contact => contact.id !== contactId)
     );
   };
 
@@ -59,7 +58,7 @@ export const App = () => {
       {contacts.length > 0 ? (
         <ContactList
           filtredContactList={filtredContactList()}
-          onDeleteContact={deleteContact}
+          onDeleteContact={onDeleteContact}
         />
       ) : (
         <Notification message="Contact list is empty." />
