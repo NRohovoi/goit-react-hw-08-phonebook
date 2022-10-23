@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { useState, useEffect } from 'react';
 
 import { nanoid } from 'nanoid';
 import { Report } from 'notiflix/build/notiflix-report-aio';
@@ -10,78 +10,62 @@ import { Notification } from './Notification/Notification';
 
 import { Box, Title, PhonebookIcon } from './App.styled';
 
-export class App extends Component {
-  state = {
-    contacts: [],
-    filter: '',
-  };
+export const App = () => {
+  const [contacts, setContacts] = useState(
+    JSON.parse(localStorage.getItem('contacts')) || []
+  );
+  const [filter, setFilter] = useState('');
 
-  addContact = ({ name, number }) => {
-    const { contacts } = this.state;
+  useEffect(() => {
+    localStorage.setItem('contacts', JSON.stringify(contacts));
+  }, [contacts]);
+
+  const addContact = ({ name, number }) => {
     const newContact = { id: nanoid(), name, number };
-    const inContact = contacts.some(contact => contact.name === name);
-    if (inContact) {
-      return Report.warning(
-        `${name}`,
-        'This user is already in the your contact list.',
-        'OK'
-      );
-    } else {
-      return this.setState(({ contacts }) => ({
-        contacts: [newContact, ...contacts],
-      }));
-    }
+
+    const someContacts = contacts.some(contact => contact.name === name);
+
+    someContacts
+      ? Report.warning(
+          `${name}`,
+          'This user is already in the contact list.',
+          'OK'
+        )
+      : setContacts(prevContacts => [newContact, ...prevContacts]);
   };
 
-  onFilterChange = e => this.setState({ filter: e.currentTarget.value });
-
-  filtredContactList = () =>
-    this.state.contacts.filter(({ name }) =>
-      name.toLowerCase().includes(this.state.filter)
+  const deleteContact = contactId => {
+    setContacts(contacts =>
+      contacts.filter(contact => contact.id !== contactId)
     );
-
-  onDeleteContact = contactId => {
-    this.setState(prevState => ({
-      contacts: prevState.contacts.filter(contact => contact.id !== contactId),
-    }));
   };
 
-  componentDidMount() {
-    const contacts = localStorage.getItem('contacts');
-    const parsedContacts = JSON.parse(contacts);
-    if (parsedContacts) {
-      this.setState({ contacts: parsedContacts });
-    }
-  }
+  const onFilterChange = e => setFilter(e.currentTarget.value);
 
-  componentDidUpdate(prevProps, prevState) {
-    if (this.props.contacts !== prevState.contacts) {
-      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
-    }
-  }
+  const filtredContactList = () => {
+    const normalizedFilter = filter.toLowerCase();
+    return contacts.filter(contact =>
+      contact.name.toLowerCase().includes(normalizedFilter)
+    );
+  };
 
-  render() {
-    const { filter } = this.state;
-    return (
-      <Box>
-        <PhonebookIcon />
-        <Title>phonebook</Title>
-        <AddContactForm onSubmit={this.addContact} />
-        <Title>contacts</Title>
-        <ContactFilters
-          contactList={filter}
-          onFilterChange={this.onFilterChange}
+  return (
+    <Box>
+      <PhonebookIcon />
+      <Title>phonebook</Title>
+      <AddContactForm onSubmit={addContact} />
+      <Title>contacts</Title>
+      <ContactFilters contactList={filter} onFilterChange={onFilterChange} />
+      {contacts.length > 0 ? (
+        <ContactList
+          filtredContactList={filtredContactList()}
+          onDeleteContact={deleteContact}
         />
-        {this.state.contacts.length > 0 ? (
-          <ContactList
-            filtredContactList={this.filtredContactList()}
-            onDeleteContact={this.onDeleteContact}
-          />
-        ) : (
-          <Notification message="Contact list is empty." />
-        )}
-      </Box>
-    );
-  }
-}
+      ) : (
+        <Notification message="Contact list is empty." />
+      )}
+    </Box>
+  );
+};
+
 export default App;
