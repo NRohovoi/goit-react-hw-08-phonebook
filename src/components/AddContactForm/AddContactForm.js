@@ -1,4 +1,6 @@
 import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
+import { addContact } from '../../Redux/ContactsSlice';
 
 import { Formik, ErrorMessage } from 'formik';
 import * as yup from 'yup';
@@ -22,9 +24,10 @@ const initialValues = {
   name: '',
   number: '',
 };
-export const AddContactForm = ({ onSubmit }) => {
+export const AddContactForm = () => {
+  const dispatch = useDispatch();
   const hendleSubmit = (values, { resetForm }) => {
-    onSubmit(values);
+    dispatch(addContact(values));
     resetForm();
   };
 
@@ -72,5 +75,7 @@ export const AddContactForm = ({ onSubmit }) => {
   );
 };
 AddContactForm.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
+  hendleSubmit: PropTypes.func,
 };
+
+export default AddContactForm;
