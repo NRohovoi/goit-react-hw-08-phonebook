@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
-import { deleteContact } from '../../Redux/ContactsSlice';
-import { getContacts, getFilter } from '../../Redux/Selectors';
+import { deleteContact } from '../../Redux/Operation';
+import { selectVisibleContacts } from '../../Redux/Selectors';
 
 import {
   ContactItem,
@@ -13,13 +13,7 @@ import {
 
 export const ContactList = () => {
   const dispatch = useDispatch();
-  const contacts = useSelector(getContacts);
-  const filter = useSelector(getFilter);
-  const filtredContactList = Object.values(contacts.items).filter
-    ? contacts.items.filter(contact =>
-        contact.name.toLowerCase().includes(filter)
-      )
-    : contacts;
+  const filtredContactList = useSelector(selectVisibleContacts);
   return (
     <ul>
       {filtredContactList.map(({ id, name, number }) => {

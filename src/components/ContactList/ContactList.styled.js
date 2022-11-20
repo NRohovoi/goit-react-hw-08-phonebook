@@ -10,6 +10,7 @@ export const ContactItem = styled.li`
   margin-top: ${p => p.theme.space[4]}px;
   padding-left: ${p => p.theme.space[4]}px;
   padding-right: ${p => p.theme.space[4]}px;
+
   border-radius: ${p => p.theme.radii.big};
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
 `;
@@ -22,6 +23,7 @@ export const ContactIcon = styled(RiContactsFill)`
 
 export const ContactData = styled.span`
   color: ${p => p.theme.colors.white};
+  font-size: ${p => p.theme.fontSizes.m};
 `;
 
 export const Buttom = styled.button`

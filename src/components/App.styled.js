@@ -41,3 +41,13 @@ export const Title = styled.h1`
   text-transform: uppercase;
   text-align: center;
 `;
+
+export const LoaderBox = styled.div`
+  height: 18px;
+  width: 18px;
+  margin-right: auto;
+  margin-left: auto;
+`;
+export const ErrorMessage = styled.p`
+  font-size: 16px;
+`;

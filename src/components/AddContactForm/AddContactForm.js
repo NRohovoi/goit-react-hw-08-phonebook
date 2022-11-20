@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { addContact } from '../../Redux/ContactsSlice';
-import { getContacts } from 'Redux/Selectors';
+import { addContact } from '../../Redux/Operation';
+import { selectItems } from 'Redux/Selectors';
 
 import { Formik, ErrorMessage } from 'formik';
 import * as yup from 'yup';
@@ -27,14 +27,14 @@ const initialValues = {
 };
 
 const toCheckName = (contacts, value) => {
-  return contacts.items.find(
+  return contacts.find(
     ({ name }) => value.toLowerCase() === name.toLowerCase()
   );
 };
 
 export const AddContactForm = () => {
   const dispatch = useDispatch();
-  const contacts = useSelector(getContacts);
+  const contacts = useSelector(selectItems);
 
   const hendleSubmit = (values, { resetForm }) => {
     const toResultNameCheck = toCheckName(contacts, values.name);
